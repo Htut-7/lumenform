@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Each user can read/write only their own profile doc.
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Each user can read/write only their own cart doc.
+    match /carts/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Orders: a signed-in user can create an order for themself, and can
+    // only read orders where they are the owner. No updates/deletes from
+    // the client — orders are immutable once placed.
+    match /orders/{orderId} {
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+      allow read: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow update, delete: if false;
+    }
+  }
+}
