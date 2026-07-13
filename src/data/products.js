@@ -1,6 +1,4 @@
-// Each product's 3D form is described parametrically (no external model files
-// needed) so ProductViewer3D can build it procedurally with primitives.
-// `form` selects a builder in ProductViewer3D; `tone` tints the glass/shade.
+
 
 export const products = [
   {
